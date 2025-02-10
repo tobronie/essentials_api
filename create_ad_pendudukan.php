@@ -1,0 +1,60 @@
+<?php
+
+include("db_koneksi.php");
+$con = db_koneksi();
+
+if (isset($_POST["pen_judul"])) {
+    $pen_judul = $_POST["pen_judul"];
+} else
+    return;
+
+if (isset($_POST["pen_foto_ktp"])) {
+    $pen_foto_ktp = $_POST["pen_foto_ktp"];
+} else
+    return;
+
+if (isset($_POST["pen_foto_kk"])) {
+    $pen_foto_kk = $_POST["pen_foto_kk"];
+} else
+    return;
+
+if (isset($_POST["pen_foto_nikah_pria"])) {
+    $pen_foto_nikah_pria = $_POST["pen_foto_nikah_pria"];
+} else
+    return;
+
+if (isset($_POST["pen_foto_nikah_wanita"])) {
+    $pen_foto_nikah_wanita = $_POST["pen_foto_nikah_wanita"];
+} else
+    return;
+
+if (isset($_POST["pen_daerah_asal"])) {
+    $pen_daerah_asal = $_POST["pen_daerah_asal"];
+} else
+    return;
+
+if (isset($_POST["pen_daerah_tujuan"])) {
+    $pen_daerah_tujuan = $_POST["pen_daerah_tujuan"];
+} else
+    return;
+
+if (isset($_POST["pen_tgl_upload"])) {
+    $pen_tgl_upload = $_POST["pen_tgl_upload"];
+} else
+    return;
+
+$query = "INSERT INTO `pendudukan` (`pen_judul`, `pen_foto_ktp`, `pen_foto_kk`, `pen_foto_nikah_pria`, `pen_foto_nikah_wanita`,
+`pen_daerah_asal`, `pen_daerah_tujuan`, `pen_tgl_upload`) VALUES ('$pen_judul', '$pen_foto_ktp', '$pen_foto_kk',
+'$pen_foto_nikah_pria', '$pen_foto_nikah_wanita', '$pen_daerah_asal', '$pen_daerah_tujuan', '$pen_tgl_upload')";
+$exe = mysqli_query($con, $query);
+
+$arr = [];
+if ($exe) {
+    $arr["success"] = "true";
+} else {
+    $arr["success"] = "false";
+}
+
+print (json_encode($arr));
+
+?>
