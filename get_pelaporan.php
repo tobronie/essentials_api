@@ -5,7 +5,13 @@ $con = db_koneksi();
 $id_lapor = isset($_GET['id_lapor']) ? $_GET['id_lapor'] : null;
 
 if ($id_lapor) {
-    $query = "SELECT `id_lapor`, `judul_lapor`, `lokasi_lapor`, `waktu_lapor`, `isi_lapor`, `foto_lapor`, `tgl_upload_lapor` FROM `pelaporan` WHERE `id_lapor` = ?";
+    $query = "SELECT pelaporan.id_lapor, pelaporan.id_user, user.nama AS nama, 
+                 pelaporan.judul_lapor, pelaporan.lokasi_lapor, pelaporan.waktu_lapor, 
+                 pelaporan.isi_lapor, pelaporan.foto_lapor, pelaporan.tgl_upload_lapor 
+          FROM pelaporan
+          JOIN user ON pelaporan.id_user = user.id_user
+          WHERE pelaporan.id_lapor = ? LIMIT 1";
+
     $stmt = $con->prepare($query);
     $stmt->bind_param("i", $id_lapor);
     $stmt->execute();

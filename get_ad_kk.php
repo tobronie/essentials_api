@@ -5,8 +5,11 @@ $con = db_koneksi();
 $id_kk = isset($_GET['id_kk']) ? $_GET['id_kk'] : null;
 
 if ($id_kk) {
-    $query = "SELECT `id_kk`, `kk_judul`, `kk_foto_kk`, `kk_foto_nikah_ayah`, `kk_foto_nikah_ibu`, `kk_foto_ijasah_keluarga`, 
-`kk_foto_akte_keluarga`, `kk_surat_konfirmasi`, `kk_tgl_upload` FROM `kk` WHERE `id_kk` = ?";
+    $query = "SELECT kk.id_kk, kk.id_user, user.nama AS nama, kk.kk_judul, kk.kk_foto_kk, kk.kk_foto_nikah_ayah,
+    kk.kk_foto_nikah_ibu, kk.kk_foto_ijasah_keluarga, kk.kk_foto_akte_keluarga, kk.kk_surat_konfirmasi, kk.kk_tgl_upload
+    FROM kk
+    JOIN user ON kk.id_user = user.id_user
+    WHERE id_kk = ? LIMIT 1";
     $stmt = $con->prepare($query);
     $stmt->bind_param("i", $id_kk);
     $stmt->execute();

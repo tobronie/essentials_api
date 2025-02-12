@@ -5,8 +5,12 @@ $con = db_koneksi();
 $id_pendudukan = isset($_GET['id_pendudukan']) ? $_GET['id_pendudukan'] : null;
 
 if ($id_pendudukan) {
-    $query = "SELECT `id_pendudukan`, `pen_judul`, `pen_foto_ktp`, `pen_foto_kk`, `pen_foto_nikah_pria`, `pen_foto_nikah_wanita`,
-`pen_daerah_asal`, `pen_daerah_tujuan`, `pen_surat_konfirmasi`, `pen_tgl_upload` FROM `pendudukan` WHERE `id_pendudukan` = ?";
+    $query = "SELECT pendudukan.id_pendudukan, pendudukan.id_user, user.nama AS nama, pendudukan.pen_judul,
+    pendudukan.pen_foto_ktp, pendudukan.pen_foto_kk, pendudukan.pen_foto_nikah_pria, pendudukan.pen_foto_nikah_wanita,
+    pendudukan.pen_daerah_asal, pendudukan.pen_daerah_tujuan, pendudukan.pen_surat_konfirmasi, pendudukan.pen_tgl_upload
+    FROM pendudukan
+    JOIN user ON pendudukan.id_user = user.id_user
+    WHERE id_pendudukan = ? LIMIT 1";
     $stmt = $con->prepare($query);
     $stmt->bind_param("i", $id_pendudukan);
     $stmt->execute();

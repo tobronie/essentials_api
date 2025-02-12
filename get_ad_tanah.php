@@ -5,8 +5,11 @@ $con = db_koneksi();
 $id_tanah = isset($_GET['id_tanah']) ? $_GET['id_tanah'] : null;
 
 if ($id_tanah) {
-    $query = "SELECT `id_tanah`, `tan_judul`, `tan_foto_ktp`, `tan_foto_kk`, `tan_foto_sppt_shm`, `tan_surat_konfirmasi`,
-`tan_tgl_upload` FROM `tanah` WHERE `id_tanah` = ?";
+    $query = "SELECT tanah.id_tanah, tanah.id_user, user.nama AS nama, tanah.tan_judul, tanah.tan_foto_ktp, tanah.tan_foto_kk,
+    tanah.tan_foto_sppt_shm, tanah.tan_surat_konfirmasi, tanah.tan_tgl_upload
+    FROM tanah
+    JOIN user ON tanah.id_user = user.id_user
+    WHERE id_tanah = ? LIMIT 1";
     $stmt = $con->prepare($query);
     $stmt->bind_param("i", $id_tanah);
     $stmt->execute();

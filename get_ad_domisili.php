@@ -5,8 +5,11 @@ $con = db_koneksi();
 $id_domisili = isset($_GET['id_domisili']) ? $_GET['id_domisili'] : null;
 
 if ($id_domisili) {
-    $query = "SELECT `id_domisili`, `dom_judul`, `dom_foto_ktp`, `dom_foto_kk`, `dom_surat_konfirmasi`, `dom_tgl_upload`
-FROM `domisili` WHERE `id_domisili` = ?";
+    $query = "SELECT domisili.id_domisili, domisili.id_user, user.nama AS nama, domisili.dom_judul, domisili.dom_foto_ktp,
+    domisili.dom_foto_kk, domisili.dom_surat_konfirmasi, domisili.dom_tgl_upload
+    FROM domisili
+    JOIN user ON domisili.id_user = user.id_user
+    WHERE id_domisili = ? LIMIT 1";
     $stmt = $con->prepare($query);
     $stmt->bind_param("i", $id_domisili);
     $stmt->execute();

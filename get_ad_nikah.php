@@ -5,10 +5,14 @@ $con = db_koneksi();
 $id_nikah = isset($_GET['id_nikah']) ? $_GET['id_nikah'] : null;
 
 if ($id_nikah) {
-    $query = "SELECT `id_nikah`, `ni_judul`, `ni_foto_ktp_pria`, `ni_foto_kk_pria`, `ni_foto_akte_pria`, `ni_foto_formulir_pria`,
-`ni_foto_nikah_ayah_pria`, `ni_foto_nikah_ibu_pria`, `ni_foto_ktp_wanita`, `ni_foto_kk_wanita`, `ni_foto_akte_wanita`,
-`ni_foto_formulir_wanita`, `ni_foto_nikah_ayah_wanita`, `ni_foto_nikah_ibu_wanita`, `ni_surat_konfirmasi`, `ni_tgl_upload`
-FROM `nikah` WHERE `id_nikah` = ?";
+    $query = "SELECT nikah.id_nikah, nikah.id_user, user.nama AS nama, nikah.ni_judul, nikah.ni_foto_ktp_pria,
+    nikah.ni_foto_kk_pria, nikah.ni_foto_akte_pria, nikah.ni_foto_formulir_pria, nikah.ni_foto_nikah_ayah_pria,
+    nikah.ni_foto_nikah_ibu_pria, nikah.ni_foto_ktp_wanita, nikah.ni_foto_kk_wanita, nikah.ni_foto_akte_wanita,
+    nikah.ni_foto_formulir_wanita, nikah.ni_foto_nikah_ayah_wanita, nikah.ni_foto_nikah_ibu_wanita,
+    nikah.ni_surat_konfirmasi, nikah.ni_tgl_upload
+    FROM nikah
+    JOIN user ON nikah.id_user = user.id_user
+    WHERE id_nikah = ? LIMIT 1";
     $stmt = $con->prepare($query);
     $stmt->bind_param("i", $id_nikah);
     $stmt->execute();
