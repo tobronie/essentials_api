@@ -5,7 +5,7 @@ $con = db_koneksi();
 $id_nikah = isset($_GET['id_nikah']) ? $_GET['id_nikah'] : null;
 
 if ($id_nikah) {
-    $query = "SELECT nikah.id_nikah, nikah.id_user, user.nama AS nama, nikah.ni_judul, nikah.ni_foto_ktp_pria,
+    $query = "SELECT nikah.id_nikah, nikah.id_user, user.nama AS nama, user.no_hp AS no_hp, user.email AS email, nikah.ni_judul, nikah.ni_foto_ktp_pria,
     nikah.ni_foto_kk_pria, nikah.ni_foto_akte_pria, nikah.ni_foto_formulir_pria, nikah.ni_foto_nikah_ayah_pria,
     nikah.ni_foto_nikah_ibu_pria, nikah.ni_foto_ktp_wanita, nikah.ni_foto_kk_wanita, nikah.ni_foto_akte_wanita,
     nikah.ni_foto_formulir_wanita, nikah.ni_foto_nikah_ayah_wanita, nikah.ni_foto_nikah_ibu_wanita,
