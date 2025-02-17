@@ -10,7 +10,7 @@ if ($row = mysqli_fetch_assoc($exe)) {
 
     if ($pdfData) {
         if (ob_get_length()) {
-            ob_end_clean(); 
+            ob_end_clean();
         }
 
         header("Content-Type: application/pdf");
