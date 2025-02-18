@@ -3,7 +3,7 @@
 include("db_koneksi.php");
 $con = db_koneksi();
 
-$query = "SELECT `id_domisili`, `dom_judul`, `dom_foto_ktp`, `dom_foto_kk`, `dom_surat_konfirmasi`, `dom_tgl_upload`
+$query = "SELECT `id_domisili`, `dom_judul`, `dom_foto_ktp`, `dom_foto_kk`, `dom_surat_konfirmasi`, `dom_tgl_upload`, `dom_konfirmasi`
 FROM `domisili`";
 $exe = mysqli_query($con, $query);
 

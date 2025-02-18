@@ -33,8 +33,13 @@ if (isset($_POST["tgl_upload_lapor"])) {
 } else
     return;
 
-$query = "INSERT INTO `pelaporan` (`judul_lapor`, `waktu_lapor`, `lokasi_lapor`, `isi_lapor`, `foto_lapor`, `tgl_upload_lapor`)
-    VALUES ('$judul_lapor', '$waktu_lapor', '$lokasi_lapor', '$isi_lapor', '$foto_lapor', '$tgl_upload_lapor')";
+if (isset($_POST["konfirmasi_lapor"])) {
+    $konfirmasi_lapor = $_POST["konfirmasi_lapor"];
+} else
+    return;
+
+$query = "INSERT INTO `pelaporan` (`judul_lapor`, `waktu_lapor`, `lokasi_lapor`, `isi_lapor`, `foto_lapor`, `tgl_upload_lapor`, `konfirmasi_lapor`)
+    VALUES ('$judul_lapor', '$waktu_lapor', '$lokasi_lapor', '$isi_lapor', '$foto_lapor', '$tgl_upload_lapor', '$konfirmasi_lapor')";
 $exe = mysqli_query($con, $query);
 
 $arr = [];

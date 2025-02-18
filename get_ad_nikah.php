@@ -9,7 +9,7 @@ if ($id_nikah) {
     nikah.ni_foto_kk_pria, nikah.ni_foto_akte_pria, nikah.ni_foto_formulir_pria, nikah.ni_foto_nikah_ayah_pria,
     nikah.ni_foto_nikah_ibu_pria, nikah.ni_foto_ktp_wanita, nikah.ni_foto_kk_wanita, nikah.ni_foto_akte_wanita,
     nikah.ni_foto_formulir_wanita, nikah.ni_foto_nikah_ayah_wanita, nikah.ni_foto_nikah_ibu_wanita,
-    nikah.ni_surat_konfirmasi, nikah.ni_tgl_upload
+    nikah.ni_surat_konfirmasi, nikah.ni_tgl_upload, nikah.ni_konfirmasi
     FROM nikah
     JOIN user ON nikah.id_user = user.id_user
     WHERE id_nikah = ? LIMIT 1";

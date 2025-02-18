@@ -38,9 +38,14 @@ if (isset($_POST["sktm_tgl_upload"])) {
 } else
     return;
 
+if (isset($_POST["sktm_konfirmasi"])) {
+    $sktm_konfirmasi = $_POST["sktm_konfirmasi"];
+} else
+    return;
+
 $query = "INSERT INTO `sktm` (`sktm_judul`, `sktm_nama_wali`, `sktm_nominal`, `sktm_rincian`, `sktm_foto_ktp`, `sktm_foto_kk`,
-`sktm_tgl_upload`)VALUES ('$sktm_judul', '$sktm_nama_wali', '$sktm_nominal', '$sktm_rincian', '$sktm_foto_ktp', '$sktm_foto_kk',
-'$sktm_tgl_upload')";
+`sktm_tgl_upload`, `sktm_konfirmasi`)VALUES ('$sktm_judul', '$sktm_nama_wali', '$sktm_nominal', '$sktm_rincian', '$sktm_foto_ktp', '$sktm_foto_kk',
+'$sktm_tgl_upload', '$sktm_konfirmasi')";
 $exe = mysqli_query($con, $query);
 
 $arr = [];

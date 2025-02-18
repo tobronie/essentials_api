@@ -7,7 +7,7 @@ $id_pendudukan = isset($_GET['id_pendudukan']) ? $_GET['id_pendudukan'] : null;
 if ($id_pendudukan) {
     $query = "SELECT pendudukan.id_pendudukan, pendudukan.id_user, user.nama AS nama, user.no_hp AS no_hp, user.email AS email, pendudukan.pen_judul,
     pendudukan.pen_foto_ktp, pendudukan.pen_foto_kk, pendudukan.pen_foto_nikah_pria, pendudukan.pen_foto_nikah_wanita,
-    pendudukan.pen_daerah_asal, pendudukan.pen_daerah_tujuan, pendudukan.pen_surat_konfirmasi, pendudukan.pen_tgl_upload
+    pendudukan.pen_daerah_asal, pendudukan.pen_daerah_tujuan, pendudukan.pen_surat_konfirmasi, pendudukan.pen_tgl_upload, pendudukan.pen_konfirmasi
     FROM pendudukan
     JOIN user ON pendudukan.id_user = user.id_user
     WHERE id_pendudukan = ? LIMIT 1";

@@ -8,10 +8,11 @@ if ($id_akte) {
     $query = "SELECT akte.id_akte, akte.id_user, user.nama AS nama, user.no_hp AS no_hp, user.email AS email, akte.ak_judul, akte.ak_foto_surat_kelahiran,
     akte.ak_foto_kk, akte.ak_foto_ktp_ayah, akte.ak_foto_nikah_ayah, akte.ak_foto_ktp_ibu, akte.ak_foto_nikah_ibu,
     akte.ak_foto_ktp_saksi_satu, akte.ak_foto_ktp_saksi_dua, akte.ak_foto_ijasah_bersangkutan, akte.ak_foto_akte_saudara,
-    akte.ak_surat_konfirmasi, akte.ak_tgl_upload
+    akte.ak_surat_konfirmasi, akte.ak_tgl_upload, akte.ak_konfirmasi
     FROM akte
     JOIN user ON akte.id_user = user.id_user
     WHERE id_akte = ? LIMIT 1";
+    
     $stmt = $con->prepare($query);
     $stmt->bind_param("i", $id_akte);
     $stmt->execute();

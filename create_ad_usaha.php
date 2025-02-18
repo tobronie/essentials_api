@@ -28,8 +28,13 @@ if (isset($_POST["us_tgl_upload"])) {
 } else
     return;
 
-$query = "INSERT INTO `usaha` (`us_judul`, `us_foto_ktp`, `us_foto_kk`, `us_omset`, `us_tgl_upload`)
-    VALUES ('$us_judul', '$us_foto_ktp', '$us_foto_kk', '$us_omset', '$us_tgl_upload')";
+if (isset($_POST["us_konfirmasi"])) {
+    $us_konfirmasi = $_POST["us_konfirmasi"];
+} else
+    return;
+
+$query = "INSERT INTO `usaha` (`us_judul`, `us_foto_ktp`, `us_foto_kk`, `us_omset`, `us_tgl_upload`, `us_konfirmasi`)
+    VALUES ('$us_judul', '$us_foto_ktp', '$us_foto_kk', '$us_omset', '$us_tgl_upload', '$us_konfirmasi')";
 $exe = mysqli_query($con, $query);
 
 $arr = [];

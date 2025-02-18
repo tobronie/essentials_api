@@ -9,7 +9,7 @@ if ($id_penghasilan) {
     penghasilan_ortu.has_pekerjaan_ayah, penghasilan_ortu.has_pendapatan_ayah, penghasilan_ortu.has_pekerjaan_ibu,
     penghasilan_ortu.has_pendapatan_ibu, penghasilan_ortu.has_foto_ktp, penghasilan_ortu.has_foto_kk,
     penghasilan_ortu.has_foto_pendukung_ayah, penghasilan_ortu.has_foto_pendukung_ibu, penghasilan_ortu.has_surat_konfirmasi,
-    penghasilan_ortu.has_tgl_upload
+    penghasilan_ortu.has_tgl_upload, penghasilan_ortu.has_konfirmasi
     FROM penghasilan_ortu
     JOIN user ON penghasilan_ortu.id_user = user.id_user
     WHERE id_penghasilan = ? LIMIT 1";

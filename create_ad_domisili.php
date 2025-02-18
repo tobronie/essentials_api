@@ -23,8 +23,13 @@ if (isset($_POST["dom_tgl_upload"])) {
 } else
     return;
 
-$query = "INSERT INTO `domisili` (`dom_judul`, `dom_foto_ktp`, `dom_foto_kk`, `dom_tgl_upload`)
-    VALUES ('$dom_judul', '$dom_foto_ktp', '$dom_foto_kk', '$dom_tgl_upload')";
+if (isset($_POST["dom_konfirmasi"])) {
+    $dom_konfirmasi = $_POST["dom_konfirmasi"];
+} else
+    return;
+
+$query = "INSERT INTO `domisili` (`dom_judul`, `dom_foto_ktp`, `dom_foto_kk`, `dom_tgl_upload`, `dom_konfirmasi`)
+    VALUES ('$dom_judul', '$dom_foto_ktp', '$dom_foto_kk', '$dom_tgl_upload', '$dom_konfirmasi')";
 $exe = mysqli_query($con, $query);
 
 $arr = [];

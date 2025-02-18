@@ -38,9 +38,14 @@ if (isset($_POST["kk_tgl_upload"])) {
 } else
     return;
 
+if (isset($_POST["kk_konfirmasi"])) {
+    $kk_konfirmasi = $_POST["kk_konfirmasi"];
+} else
+    return;
+
 $query = "INSERT INTO `kk` (`kk_judul`, `kk_foto_kk`, `kk_foto_nikah_ayah`, `kk_foto_nikah_ibu`, `kk_foto_ijasah_keluarga`, 
-`kk_foto_akte_keluarga`, `kk_tgl_upload`) VALUES ('$kk_judul', '$kk_foto_kk', '$kk_foto_nikah_ayah', '$kk_foto_nikah_ibu',
-'$kk_foto_ijasah_keluarga', '$kk_foto_akte_keluarga', '$kk_tgl_upload')";
+`kk_foto_akte_keluarga`, `kk_tgl_upload`, `kk_konfirmasi`) VALUES ('$kk_judul', '$kk_foto_kk', '$kk_foto_nikah_ayah', '$kk_foto_nikah_ibu',
+'$kk_foto_ijasah_keluarga', '$kk_foto_akte_keluarga', '$kk_tgl_upload', '$kk_konfirmasi')";
 $exe = mysqli_query($con, $query);
 
 $arr = [];

@@ -53,10 +53,15 @@ if (isset($_POST["has_tgl_upload"])) {
 } else
     return;
 
+if (isset($_POST["has_konfirmasi"])) {
+    $has_konfirmasi = $_POST["has_konfirmasi"];
+} else
+    return;
+
 $query = "INSERT INTO `penghasilan_ortu` (`has_judul`, `has_pekerjaan_ayah`, `has_pendapatan_ayah`, `has_pekerjaan_ibu`,
-`has_pendapatan_ibu`, `has_foto_ktp`, `has_foto_kk`, `has_foto_pendukung_ayah`, `has_foto_pendukung_ibu`, `has_tgl_upload`)
+`has_pendapatan_ibu`, `has_foto_ktp`, `has_foto_kk`, `has_foto_pendukung_ayah`, `has_foto_pendukung_ibu`, `has_tgl_upload`, `has_konfirmasi`)
 VALUES ('$has_judul', '$has_pekerjaan_ayah', '$has_pendapatan_ayah', '$has_pekerjaan_ibu', '$has_pendapatan_ibu', '$has_foto_ktp',
-'$has_foto_kk', '$has_foto_pendukung_ayah', '$has_foto_pendukung_ibu', '$has_tgl_upload')";
+'$has_foto_kk', '$has_foto_pendukung_ayah', '$has_foto_pendukung_ibu', '$has_tgl_upload', '$has_konfirmasi')";
 $exe = mysqli_query($con, $query);
 
 $arr = [];
