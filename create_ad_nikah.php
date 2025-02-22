@@ -68,6 +68,11 @@ if (isset($_POST["ni_foto_nikah_ibu_wanita"])) {
 } else
     return;
 
+if (isset($_POST["ni_surat_konfirmasi"])) {
+    $ni_surat_konfirmasi = $_POST["ni_surat_konfirmasi"];
+} else
+    return;
+
 if (isset($_POST["ni_tgl_upload"])) {
     $ni_tgl_upload = $_POST["ni_tgl_upload"];
 } else
@@ -80,10 +85,10 @@ if (isset($_POST["ni_konfirmasi"])) {
 
 $query = "INSERT INTO `nikah` (`ni_judul`, `ni_foto_ktp_pria`, `ni_foto_kk_pria`, `ni_foto_akte_pria`, `ni_foto_formulir_pria`,
 `ni_foto_nikah_ayah_pria`, `ni_foto_nikah_ibu_pria`, `ni_foto_ktp_wanita`, `ni_foto_kk_wanita`, `ni_foto_akte_wanita`,
-`ni_foto_formulir_wanita`, `ni_foto_nikah_ayah_wanita`, `ni_foto_nikah_ibu_wanita`, `ni_tgl_upload`, `ni_konfirmasi`) VALUES ('$ni_judul',
+`ni_foto_formulir_wanita`, `ni_foto_nikah_ayah_wanita`, `ni_foto_nikah_ibu_wanita`, `ni_surat_konfirmasi`, `ni_tgl_upload`, `ni_konfirmasi`) VALUES ('$ni_judul',
 '$ni_foto_ktp_pria', '$ni_foto_kk_pria', '$ni_foto_akte_pria', '$ni_foto_formulir_pria', '$ni_foto_nikah_ayah_pria',
 '$ni_foto_nikah_ibu_pria', '$ni_foto_ktp_wanita', '$ni_foto_kk_wanita', '$ni_foto_akte_wanita', '$ni_foto_formulir_wanita',
-'$ni_foto_nikah_ayah_wanita','$ni_foto_nikah_ibu_wanita', '$ni_tgl_upload', '$ni_konfirmasi')";
+'$ni_foto_nikah_ayah_wanita','$ni_foto_nikah_ibu_wanita', '$ni_surat_konfirmasi', '$ni_tgl_upload', '$ni_konfirmasi')";
 $exe = mysqli_query($con, $query);
 
 $arr = [];

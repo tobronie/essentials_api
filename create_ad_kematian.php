@@ -33,6 +33,11 @@ if (isset($_POST["kem_foto_ktp_saksi"])) {
 } else
     return;
 
+if (isset($_POST["kem_surat_konfirmasi"])) {
+    $kem_surat_konfirmasi = $_POST["kem_surat_konfirmasi"];
+} else
+    return;
+
 if (isset($_POST["kem_tgl_upload"])) {
     $kem_tgl_upload = $_POST["kem_tgl_upload"];
 } else
@@ -44,8 +49,8 @@ if (isset($_POST["kem_konfirmasi"])) {
     return;
 
 $query = "INSERT INTO `kematian` (`kem_judul`, `kem_nama_almarhum`, `kem_foto_ktp_almarhum`, `kem_foto_kk`,
-`kem_foto_surat_kematian`, `kem_foto_ktp_saksi`, `kem_tgl_upload`, `kem_konfirmasi`) VALUES ('$kem_judul', '$kem_nama_almarhum',
-'$kem_foto_ktp_almarhum', '$kem_foto_kk', '$kem_foto_surat_kematian', '$kem_foto_ktp_saksi', '$kem_tgl_upload', '$kem_konfirmasi')";
+`kem_foto_surat_kematian`, `kem_foto_ktp_saksi`, `kem_surat_konfirmasi`, `kem_tgl_upload`, `kem_konfirmasi`) VALUES ('$kem_judul', '$kem_nama_almarhum',
+'$kem_foto_ktp_almarhum', '$kem_foto_kk', '$kem_foto_surat_kematian', '$kem_foto_ktp_saksi', '$kem_surat_konfirmasi', '$kem_tgl_upload', '$kem_konfirmasi')";
 $exe = mysqli_query($con, $query);
 
 $arr = [];

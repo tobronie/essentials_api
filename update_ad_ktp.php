@@ -2,26 +2,39 @@
 include("db_koneksi.php");
 $con = db_koneksi();
 
-if (isset($_POST["id_ktp"])) {
-    $id_ktp = $_POST["id_ktp"];
-} else
+if (!isset($_POST["id_ktp"]) || !isset($_FILES["kt_surat_konfirmasi"])) {
+    echo json_encode(["success" => "false"]);
     return;
-
-if (isset($_POST["kt_surat_konfirmasi"])) {
-    $kt_surat_konfirmasi = $_POST["kt_surat_konfirmasi"];
-} else
-    return;
-
-$query = "UPDATE `ktp` SET `kt_surat_konfirmasi`='$kt_surat_konfirmasi' WHERE `id_ktp`='$id_ktp'";
-$exe = mysqli_query($con, $query);
-
-$arr = [];
-if ($exe) {
-    $arr["success"] = "true";
-} else {
-    $arr["success"] = "false";
 }
 
-print (json_encode($arr));
+$id_ktp = $_POST["id_ktp"];
+$file = $_FILES["kt_surat_konfirmasi"];
 
+$allowed_types = ['application/pdf'];
+if (!in_array($file['type'], $allowed_types)) {
+    echo json_encode(["success" => "false"]);
+    return;
+}
+
+$upload_dir = "uploads/";
+if (!is_dir($upload_dir)) {
+    mkdir($upload_dir, 0777, true);
+}
+
+$file_path = $upload_dir . basename($file["name"]);
+
+if (move_uploaded_file($file["tmp_name"], $file_path)) {
+    $query = "UPDATE `ktp` SET `kt_surat_konfirmasi`=? WHERE `id_ktp`=?";
+    $stmt = mysqli_prepare($con, $query);
+    mysqli_stmt_bind_param($stmt, "si", $file_path, $id_ktp);
+    $exe = mysqli_stmt_execute($stmt);
+
+    if ($exe) {
+        echo json_encode(["success" => "true"]);
+    } else {
+        echo json_encode(["success" => "false"]);
+    }
+} else {
+    echo json_encode(["success" => "false"]);
+}
 ?>

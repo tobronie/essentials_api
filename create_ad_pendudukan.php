@@ -38,6 +38,11 @@ if (isset($_POST["pen_daerah_tujuan"])) {
 } else
     return;
 
+if (isset($_POST["pen_surat_konfirmasi"])) {
+    $pen_surat_konfirmasi = $_POST["pen_surat_konfirmasi"];
+} else
+    return;
+
 if (isset($_POST["pen_tgl_upload"])) {
     $pen_tgl_upload = $_POST["pen_tgl_upload"];
 } else
@@ -49,8 +54,8 @@ if (isset($_POST["pen_konfirmasi"])) {
     return;
 
 $query = "INSERT INTO `pendudukan` (`pen_judul`, `pen_foto_ktp`, `pen_foto_kk`, `pen_foto_nikah_pria`, `pen_foto_nikah_wanita`,
-`pen_daerah_asal`, `pen_daerah_tujuan`, `pen_tgl_upload`, `pen_konfirmasi`) VALUES ('$pen_judul', '$pen_foto_ktp', '$pen_foto_kk',
-'$pen_foto_nikah_pria', '$pen_foto_nikah_wanita', '$pen_daerah_asal', '$pen_daerah_tujuan', '$pen_tgl_upload', '$pen_konfirmasi')";
+`pen_daerah_asal`, `pen_daerah_tujuan`, `pen_surat_konfirmasi`, `pen_tgl_upload`, `pen_konfirmasi`) VALUES ('$pen_judul', '$pen_foto_ktp', '$pen_foto_kk',
+'$pen_foto_nikah_pria', '$pen_foto_nikah_wanita', '$pen_daerah_asal', '$pen_daerah_tujuan', '$pen_surat_konfirmasi', '$pen_tgl_upload', '$pen_konfirmasi')";
 $exe = mysqli_query($con, $query);
 
 $arr = [];

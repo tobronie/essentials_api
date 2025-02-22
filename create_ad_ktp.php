@@ -23,18 +23,23 @@ if (isset($_POST["kt_foto_formulir"])) {
 } else
     return;
 
+if (isset($_POST["kt_surat_konfirmasi"])) {
+    $kt_surat_konfirmasi = $_POST["kt_surat_konfirmasi"];
+} else
+    return;
+
 if (isset($_POST["kt_tgl_upload"])) {
     $kt_tgl_upload = $_POST["kt_tgl_upload"];
 } else
     return;
 
-    if (isset($_POST["kt_konfirmasi"])) {
-        $kt_konfirmasi = $_POST["kt_konfirmasi"];
-    } else
-        return;
+if (isset($_POST["kt_konfirmasi"])) {
+    $kt_konfirmasi = $_POST["kt_konfirmasi"];
+} else
+    return;
 
-$query = "INSERT INTO `ktp` (`kt_judul`, `kt_foto_akte`, `kt_foto_kk`, `kt_foto_formulir`, `kt_tgl_upload`, `kt_konfirmasi`) VALUES
-('$kt_judul', '$kt_foto_akte', '$kt_foto_kk', '$kt_foto_formulir', '$kt_tgl_upload', '$kt_konfirmasi')";
+$query = "INSERT INTO `ktp` (`kt_judul`, `kt_foto_akte`, `kt_foto_kk`, `kt_foto_formulir`, `kt_surat_konfirmasi`, `kt_tgl_upload`, `kt_konfirmasi`) VALUES
+('$kt_judul', '$kt_foto_akte', '$kt_foto_kk', '$kt_foto_formulir', '$kt_surat_konfirmasi', '$kt_tgl_upload', '$kt_konfirmasi')";
 $exe = mysqli_query($con, $query);
 
 $arr = [];
