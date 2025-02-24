@@ -3,6 +3,11 @@
 include("db_koneksi.php");
 $con = db_koneksi();
 
+if (isset($_POST["id_user"])) {
+    $id_user = $_POST["id_user"];
+} else
+    return;
+
 if (isset($_POST["judul_lapor"])) {
     $judul_lapor = $_POST["judul_lapor"];
 } else
@@ -38,17 +43,33 @@ if (isset($_POST["konfirmasi_lapor"])) {
 } else
     return;
 
-$query = "INSERT INTO `pelaporan` (`judul_lapor`, `waktu_lapor`, `lokasi_lapor`, `isi_lapor`, `foto_lapor`, `tgl_upload_lapor`, `konfirmasi_lapor`)
-    VALUES ('$judul_lapor', '$waktu_lapor', '$lokasi_lapor', '$isi_lapor', '$foto_lapor', '$tgl_upload_lapor', '$konfirmasi_lapor')";
-$exe = mysqli_query($con, $query);
+$query = "INSERT INTO `pelaporan` (`id_user`, `judul_lapor`, `waktu_lapor`, `lokasi_lapor`, `isi_lapor`, `foto_lapor`,
+    `tgl_upload_lapor`, `konfirmasi_lapor`)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+$stmt = $con->prepare($query);
+$stmt->bind_param(
+    "isssssss",
+    $id_user,
+    $judul_lapor,
+    $waktu_lapor,
+    $lokasi_lapor,
+    $isi_lapor,
+    $foto_lapor,
+    $tgl_upload_lapor,
+    $konfirmasi_lapor
+);
 
 $arr = [];
-if ($exe) {
+if ($stmt->execute()) {
     $arr["success"] = "true";
 } else {
     $arr["success"] = "false";
 }
 
-print (json_encode($arr));
+$stmt->close();
+$con->close();
+
+echo json_encode($arr);
 
 ?>

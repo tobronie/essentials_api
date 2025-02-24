@@ -3,6 +3,11 @@
 include("db_koneksi.php");
 $con = db_koneksi();
 
+if (isset($_POST["id_user"])) {
+    $id_user = $_POST["id_user"];
+} else
+    return;
+
 if (isset($_POST["has_judul"])) {
     $has_judul = $_POST["has_judul"];
 } else
@@ -63,19 +68,39 @@ if (isset($_POST["has_konfirmasi"])) {
 } else
     return;
 
-$query = "INSERT INTO `penghasilan_ortu` (`has_judul`, `has_pekerjaan_ayah`, `has_pendapatan_ayah`, `has_pekerjaan_ibu`,
-`has_pendapatan_ibu`, `has_foto_ktp`, `has_foto_kk`, `has_foto_pendukung_ayah`, `has_foto_pendukung_ibu`, `has_surat_konfirmasi`, `has_tgl_upload`, `has_konfirmasi`)
-VALUES ('$has_judul', '$has_pekerjaan_ayah', '$has_pendapatan_ayah', '$has_pekerjaan_ibu', '$has_pendapatan_ibu', '$has_foto_ktp',
-'$has_foto_kk', '$has_foto_pendukung_ayah', '$has_foto_pendukung_ibu', '$has_surat_konfirmasi', '$has_tgl_upload', '$has_konfirmasi')";
-$exe = mysqli_query($con, $query);
+$query = "INSERT INTO `penghasilan_ortu` (`id_user`, `has_judul`, `has_pekerjaan_ayah`, `has_pendapatan_ayah`,
+    `has_pekerjaan_ibu`, `has_pendapatan_ibu`, `has_foto_ktp`, `has_foto_kk`, `has_foto_pendukung_ayah`,
+    `has_foto_pendukung_ibu`, `has_surat_konfirmasi`, `has_tgl_upload`, `has_konfirmasi`)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+$stmt = $con->prepare($query);
+$stmt->bind_param(
+    "issssssssssss",
+    $id_user,
+    $has_judul,
+    $has_pekerjaan_ayah,
+    $has_pendapatan_ayah,
+    $has_pekerjaan_ibu,
+    $has_pendapatan_ibu,
+    $has_foto_ktp,
+    $has_foto_kk,
+    $has_foto_pendukung_ayah,
+    $has_foto_pendukung_ibu,
+    $has_surat_konfirmasi,
+    $has_tgl_upload,
+    $has_konfirmasi
+);
 
 $arr = [];
-if ($exe) {
+if ($stmt->execute()) {
     $arr["success"] = "true";
 } else {
     $arr["success"] = "false";
 }
 
-print (json_encode($arr));
+$stmt->close();
+$con->close();
+
+echo json_encode($arr);
 
 ?>

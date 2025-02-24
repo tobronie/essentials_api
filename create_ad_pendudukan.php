@@ -3,6 +3,11 @@
 include("db_koneksi.php");
 $con = db_koneksi();
 
+if (isset($_POST["id_user"])) {
+    $id_user = $_POST["id_user"];
+} else
+    return;
+
 if (isset($_POST["pen_judul"])) {
     $pen_judul = $_POST["pen_judul"];
 } else
@@ -53,18 +58,37 @@ if (isset($_POST["pen_konfirmasi"])) {
 } else
     return;
 
-$query = "INSERT INTO `pendudukan` (`pen_judul`, `pen_foto_ktp`, `pen_foto_kk`, `pen_foto_nikah_pria`, `pen_foto_nikah_wanita`,
-`pen_daerah_asal`, `pen_daerah_tujuan`, `pen_surat_konfirmasi`, `pen_tgl_upload`, `pen_konfirmasi`) VALUES ('$pen_judul', '$pen_foto_ktp', '$pen_foto_kk',
-'$pen_foto_nikah_pria', '$pen_foto_nikah_wanita', '$pen_daerah_asal', '$pen_daerah_tujuan', '$pen_surat_konfirmasi', '$pen_tgl_upload', '$pen_konfirmasi')";
-$exe = mysqli_query($con, $query);
+$query = "INSERT INTO `pendudukan` (`id_user`,`pen_judul`, `pen_foto_ktp`, `pen_foto_kk`, `pen_foto_nikah_pria`,
+    `pen_foto_nikah_wanita`, `pen_daerah_asal`, `pen_daerah_tujuan`, `pen_surat_konfirmasi`, `pen_tgl_upload`,
+    `pen_konfirmasi`)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+$stmt = $con->prepare($query);
+$stmt->bind_param(
+    "issssssssss",
+    $id_user,
+    $pen_judul,
+    $pen_foto_ktp,
+    $pen_foto_kk,
+    $pen_foto_nikah_pria,
+    $pen_foto_nikah_wanita,
+    $pen_daerah_asal,
+    $pen_daerah_tujuan,
+    $pen_surat_konfirmasi,
+    $pen_tgl_upload,
+    $pen_konfirmasi
+);
 
 $arr = [];
-if ($exe) {
+if ($stmt->execute()) {
     $arr["success"] = "true";
 } else {
     $arr["success"] = "false";
 }
 
-print (json_encode($arr));
+$stmt->close();
+$con->close();
+
+echo json_encode($arr);
 
 ?>

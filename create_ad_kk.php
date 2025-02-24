@@ -3,6 +3,11 @@
 include("db_koneksi.php");
 $con = db_koneksi();
 
+if (isset($_POST["id_user"])) {
+    $id_user = $_POST["id_user"];
+} else
+    return;
+
 if (isset($_POST["kk_judul"])) {
     $kk_judul = $_POST["kk_judul"];
 } else
@@ -48,18 +53,35 @@ if (isset($_POST["kk_konfirmasi"])) {
 } else
     return;
 
-$query = "INSERT INTO `kk` (`kk_judul`, `kk_foto_kk`, `kk_foto_nikah_ayah`, `kk_foto_nikah_ibu`, `kk_foto_ijasah_keluarga`, 
-`kk_foto_akte_keluarga`, `kk_surat_konfirmasi`, `kk_tgl_upload`, `kk_konfirmasi`) VALUES ('$kk_judul', '$kk_foto_kk', '$kk_foto_nikah_ayah', '$kk_foto_nikah_ibu',
-'$kk_foto_ijasah_keluarga', '$kk_foto_akte_keluarga', '$kk_surat_konfirmasi', '$kk_tgl_upload', '$kk_konfirmasi')";
-$exe = mysqli_query($con, $query);
+$query = "INSERT INTO `kk` (`id_user`, `kk_judul`, `kk_foto_kk`, `kk_foto_nikah_ayah`, `kk_foto_nikah_ibu`, `kk_foto_ijasah_keluarga`, 
+`kk_foto_akte_keluarga`, `kk_surat_konfirmasi`, `kk_tgl_upload`, `kk_konfirmasi`)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+$stmt = $con->prepare($query);
+$stmt->bind_param(
+    "isssssssss",
+    $id_user,
+    $kk_judul,
+    $kk_foto_kk,
+    $kk_foto_nikah_ayah,
+    $kk_foto_nikah_ibu,
+    $kk_foto_ijasah_keluarga,
+    $kk_foto_akte_keluarga,
+    $kk_surat_konfirmasi,
+    $kk_tgl_upload,
+    $kk_konfirmasi
+);
 
 $arr = [];
-if ($exe) {
+if ($stmt->execute()) {
     $arr["success"] = "true";
 } else {
     $arr["success"] = "false";
 }
 
-print (json_encode($arr));
+$stmt->close();
+$con->close();
+
+echo json_encode($arr);
 
 ?>

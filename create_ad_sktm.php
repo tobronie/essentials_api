@@ -3,6 +3,11 @@
 include("db_koneksi.php");
 $con = db_koneksi();
 
+if (isset($_POST["id_user"])) {
+    $id_user = $_POST["id_user"];
+} else
+    return;
+
 if (isset($_POST["sktm_judul"])) {
     $sktm_judul = $_POST["sktm_judul"];
 } else
@@ -48,18 +53,35 @@ if (isset($_POST["sktm_konfirmasi"])) {
 } else
     return;
 
-$query = "INSERT INTO `sktm` (`sktm_judul`, `sktm_nama_wali`, `sktm_nominal`, `sktm_rincian`, `sktm_foto_ktp`, `sktm_foto_kk`, `sktm_surat_konfirmasi`,
-`sktm_tgl_upload`, `sktm_konfirmasi`)VALUES ('$sktm_judul', '$sktm_nama_wali', '$sktm_nominal', '$sktm_rincian', '$sktm_foto_ktp', '$sktm_foto_kk',
-'$sktm_surat_konfirmasi', '$sktm_tgl_upload', '$sktm_konfirmasi')";
-$exe = mysqli_query($con, $query);
+$query = "INSERT INTO `sktm` (`id_user`, `sktm_judul`, `sktm_nama_wali`, `sktm_nominal`, `sktm_rincian`, `sktm_foto_ktp`,
+    `sktm_foto_kk`, `sktm_surat_konfirmasi`, `sktm_tgl_upload`, `sktm_konfirmasi`)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+$stmt = $con->prepare($query);
+$stmt->bind_param(
+    "isssssssss",
+    $id_user,
+    $sktm_judul,
+    $sktm_nama_wali,
+    $sktm_nominal,
+    $sktm_rincian,
+    $sktm_foto_ktp,
+    $sktm_foto_kk,
+    $sktm_surat_konfirmasi,
+    $sktm_tgl_upload,
+    $sktm_konfirmasi
+);
 
 $arr = [];
-if ($exe) {
+if ($stmt->execute()) {
     $arr["success"] = "true";
 } else {
     $arr["success"] = "false";
 }
 
-print (json_encode($arr));
+$stmt->close();
+$con->close();
+
+echo json_encode($arr);
 
 ?>

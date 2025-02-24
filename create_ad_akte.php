@@ -3,6 +3,11 @@
 include("db_koneksi.php");
 $con = db_koneksi();
 
+if (isset($_POST["id_user"])) {
+    $id_user = $_POST["id_user"];
+} else
+    return;
+
 if (isset($_POST["ak_judul"])) {
     $ak_judul = $_POST["ak_judul"];
 } else
@@ -73,20 +78,41 @@ if (isset($_POST["ak_konfirmasi"])) {
 } else
     return;
 
-$query = "INSERT INTO `akte` (`ak_judul`, `ak_foto_surat_kelahiran`, `ak_foto_kk`, `ak_foto_ktp_ayah`, `ak_foto_nikah_ayah`,
-`ak_foto_ktp_ibu`,`ak_foto_nikah_ibu`, `ak_foto_ktp_saksi_satu`, `ak_foto_ktp_saksi_dua`, `ak_foto_ijasah_bersangkutan`,
-`ak_foto_akte_saudara`, `ak_surat_konfirmasi`, `ak_tgl_upload`, `ak_konfirmasi`) VALUES ('$ak_judul', '$ak_foto_surat_kelahiran', '$ak_foto_kk', '$ak_foto_ktp_ayah',
-'$ak_foto_nikah_ayah', '$ak_foto_ktp_ibu','$ak_foto_nikah_ibu', '$ak_foto_ktp_saksi_satu', '$ak_foto_ktp_saksi_dua',
-'$ak_foto_ijasah_bersangkutan', '$ak_foto_akte_saudara', '$ak_surat_konfirmasi', '$ak_tgl_upload', '$ak_konfirmasi')";
-$exe = mysqli_query($con, $query);
+$query = "INSERT INTO `akte` (`id_user`, `ak_judul`, `ak_foto_surat_kelahiran`, `ak_foto_kk`, `ak_foto_ktp_ayah`, `ak_foto_nikah_ayah`,
+    `ak_foto_ktp_ibu`,`ak_foto_nikah_ibu`, `ak_foto_ktp_saksi_satu`, `ak_foto_ktp_saksi_dua`, `ak_foto_ijasah_bersangkutan`,
+    `ak_foto_akte_saudara`, `ak_surat_konfirmasi`, `ak_tgl_upload`, `ak_konfirmasi`)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+$stmt = $con->prepare($query);
+$stmt->bind_param(
+    "issssssssssssss",
+    $id_user,
+    $ak_judul,
+    $ak_foto_surat_kelahiran,
+    $ak_foto_kk,
+    $ak_foto_ktp_ayah,
+    $ak_foto_nikah_ayah,
+    $ak_foto_ktp_ibu,
+    $ak_foto_nikah_ibu,
+    $ak_foto_ktp_saksi_satu,
+    $ak_foto_ktp_saksi_dua,
+    $ak_foto_ijasah_bersangkutan,
+    $ak_foto_akte_saudara,
+    $ak_surat_konfirmasi,
+    $ak_tgl_upload,
+    $ak_konfirmasi
+);
 
 $arr = [];
-if ($exe) {
+if ($stmt->execute()) {
     $arr["success"] = "true";
 } else {
     $arr["success"] = "false";
 }
 
-print (json_encode($arr));
+$stmt->close();
+$con->close();
+
+echo json_encode($arr);
 
 ?>
