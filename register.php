@@ -21,7 +21,7 @@ if (isset($_POST["no_hp"])) {
 if (isset($_POST["email"])) {
     $email = $_POST["email"];
 } else
-    return; 
+    return;
 
 if (isset($_POST["password"])) {
     $password = $_POST["password"];
@@ -65,16 +65,25 @@ if (mysqli_num_rows($result) > 0) {
 }
 
 $query = "INSERT INTO `user` (`nama`, `nik`, `no_hp`, `email`, `password`)
-VALUES ('$nama', '$nik', '$no_hp', '$email', '$password')";
-$exe = mysqli_query($con, $query);
+VALUES (?, ?, ?, ?, ?)";
+$stmt = mysqli_prepare($con, $query);
 
-$arr = [];
-if ($exe) {
-    $arr["success"] = "true";
+if ($stmt) {
+    mysqli_stmt_bind_param($stmt, "sssss", $nama, $nik, $no_hp, $email, $password);
+    $exe = mysqli_stmt_execute($stmt);
+
+    if ($exe) {
+        $id_user = mysqli_insert_id($con);
+        echo json_encode(["success" => "true", "id_user" => $id_user]);
+    } else {
+        echo json_encode(["success" => "false", "message" => "Gagal mendaftar"]);
+    }
+
+    mysqli_stmt_close($stmt);
 } else {
-    $arr["success"] = "false";
+    echo json_encode(["success" => "false", "message" => "Gagal menyiapkan query"]);
 }
 
-print (json_encode($arr));
+mysqli_close($con);
 
 ?>
