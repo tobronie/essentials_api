@@ -1,57 +1,44 @@
 <?php
-
 include("db_koneksi.php");
 $con = db_koneksi();
 
-if (isset($_POST["id_user"])) {
-    $id_user = $_POST["id_user"];
-} else
-    return;
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-if (isset($_POST["sktm_judul"])) {
-    $sktm_judul = $_POST["sktm_judul"];
-} else
-    return;
+if (!isset($_POST["id_user"], $_POST["sktm_judul"], $_POST["sktm_nama_wali"], $_POST["sktm_nominal"], $_POST["sktm_rincian"], $_POST["sktm_surat_konfirmasi"], $_POST["sktm_tgl_upload"], $_POST["sktm_konfirmasi"])) {
+    echo json_encode(["success" => "false", "message" => "Data tidak lengkap"]);
+    exit;
+}
 
-if (isset($_POST["sktm_nama_wali"])) {
-    $sktm_nama_wali = $_POST["sktm_nama_wali"];
-} else
-    return;
+$id_user = mysqli_real_escape_string($con, $_POST["id_user"]);
+$sktm_judul = mysqli_real_escape_string($con, $_POST["sktm_judul"]);
+$sktm_nama_wali = mysqli_real_escape_string($con, $_POST["sktm_nama_wali"]);
+$sktm_nominal = mysqli_real_escape_string($con, $_POST["sktm_nominal"]);
+$sktm_rincian = mysqli_real_escape_string($con, $_POST["sktm_rincian"]);
+$sktm_surat_konfirmasi = mysqli_real_escape_string($con, $_POST["sktm_surat_konfirmasi"]);
+$sktm_tgl_upload = mysqli_real_escape_string($con, $_POST["sktm_tgl_upload"]);
+$sktm_konfirmasi = mysqli_real_escape_string($con, $_POST["sktm_konfirmasi"]);
 
-if (isset($_POST["sktm_nominal"])) {
-    $sktm_nominal = $_POST["sktm_nominal"];
-} else
-    return;
+$upload_dir = "uploads/";
+if (!is_dir($upload_dir)) {
+    mkdir($upload_dir, 0777, true);
+}
 
-if (isset($_POST["sktm_rincian"])) {
-    $sktm_rincian = $_POST["sktm_rincian"];
-} else
-    return;
+function uploadFile($file_key, $upload_dir) {
+    if (isset($_FILES[$file_key]) && $_FILES[$file_key]["error"] == UPLOAD_ERR_OK) {
+        $file_tmp = $_FILES[$file_key]["tmp_name"];
+        $file_name = time() . "_" . basename($_FILES[$file_key]["name"]);
+        $file_path = $upload_dir . $file_name;
 
-if (isset($_POST["sktm_foto_ktp"])) {
-    $sktm_foto_ktp = $_POST["sktm_foto_ktp"];
-} else
-    return;
+        if (move_uploaded_file($file_tmp, $file_path)) {
+            return $file_name;
+        }
+    }
+    return "";
+}
 
-if (isset($_POST["sktm_foto_kk"])) {
-    $sktm_foto_kk = $_POST["sktm_foto_kk"];
-} else
-    return;
-
-if (isset($_POST["sktm_surat_konfirmasi"])) {
-    $sktm_surat_konfirmasi = $_POST["sktm_surat_konfirmasi"];
-} else
-    return;
-
-if (isset($_POST["sktm_tgl_upload"])) {
-    $sktm_tgl_upload = $_POST["sktm_tgl_upload"];
-} else
-    return;
-
-if (isset($_POST["sktm_konfirmasi"])) {
-    $sktm_konfirmasi = $_POST["sktm_konfirmasi"];
-} else
-    return;
+$sktm_foto_ktp = uploadFile("sktm_foto_ktp", $upload_dir);
+$sktm_foto_kk = uploadFile("sktm_foto_kk", $upload_dir);
 
 $query = "INSERT INTO `sktm` (`id_user`, `sktm_judul`, `sktm_nama_wali`, `sktm_nominal`, `sktm_rincian`, `sktm_foto_ktp`,
     `sktm_foto_kk`, `sktm_surat_konfirmasi`, `sktm_tgl_upload`, `sktm_konfirmasi`)
@@ -72,16 +59,12 @@ $stmt->bind_param(
     $sktm_konfirmasi
 );
 
-$arr = [];
 if ($stmt->execute()) {
-    $arr["success"] = "true";
+    echo json_encode(["success" => "true", "message" => "Data SKTM berhasil disimpan"]);
 } else {
-    $arr["success"] = "false";
+    echo json_encode(["success" => "false", "message" => "SQL Error: " . $stmt->error]);
 }
 
 $stmt->close();
 $con->close();
-
-echo json_encode($arr);
-
 ?>

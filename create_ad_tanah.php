@@ -1,47 +1,42 @@
 <?php
-
 include("db_koneksi.php");
 $con = db_koneksi();
 
-if (isset($_POST["id_user"])) {
-    $id_user = $_POST["id_user"];
-} else
-    return;
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-if (isset($_POST["tan_judul"])) {
-    $tan_judul = $_POST["tan_judul"];
-} else
-    return;
+if (!isset($_POST["id_user"], $_POST["tan_judul"], $_POST["tan_surat_konfirmasi"], $_POST["tan_tgl_upload"], $_POST["tan_konfirmasi"])) {
+    echo json_encode(["success" => "false", "message" => "Data tidak lengkap"]);
+    exit;
+}
 
-if (isset($_POST["tan_foto_ktp"])) {
-    $tan_foto_ktp = $_POST["tan_foto_ktp"];
-} else
-    return;
+$id_user = mysqli_real_escape_string($con, $_POST["id_user"]);
+$tan_judul = mysqli_real_escape_string($con, $_POST["tan_judul"]);
+$tan_surat_konfirmasi = mysqli_real_escape_string($con, $_POST["tan_surat_konfirmasi"]);
+$tan_tgl_upload = mysqli_real_escape_string($con, $_POST["tan_tgl_upload"]);
+$tan_konfirmasi = mysqli_real_escape_string($con, $_POST["tan_konfirmasi"]);
 
-if (isset($_POST["tan_foto_kk"])) {
-    $tan_foto_kk = $_POST["tan_foto_kk"];
-} else
-    return;
+$upload_dir = "uploads/";
+if (!is_dir($upload_dir)) {
+    mkdir($upload_dir, 0777, true);
+}
 
-if (isset($_POST["tan_foto_sppt_shm"])) {
-    $tan_foto_sppt_shm = $_POST["tan_foto_sppt_shm"];
-} else
-    return;
+function uploadFile($file_key, $upload_dir) {
+    if (isset($_FILES[$file_key]) && $_FILES[$file_key]["error"] == UPLOAD_ERR_OK) {
+        $file_tmp = $_FILES[$file_key]["tmp_name"];
+        $file_name = time() . "_" . basename($_FILES[$file_key]["name"]);
+        $file_path = $upload_dir . $file_name;
 
-if (isset($_POST["tan_surat_konfirmasi"])) {
-    $tan_surat_konfirmasi = $_POST["tan_surat_konfirmasi"];
-} else
-    return;
+        if (move_uploaded_file($file_tmp, $file_path)) {
+            return $file_name;
+        }
+    }
+    return "";
+}
 
-if (isset($_POST["tan_tgl_upload"])) {
-    $tan_tgl_upload = $_POST["tan_tgl_upload"];
-} else
-    return;
-
-if (isset($_POST["tan_konfirmasi"])) {
-    $tan_konfirmasi = $_POST["tan_konfirmasi"];
-} else
-    return;
+$tan_foto_ktp = uploadFile("tan_foto_ktp", $upload_dir);
+$tan_foto_kk = uploadFile("tan_foto_kk", $upload_dir);
+$tan_foto_sppt_shm = uploadFile("tan_foto_sppt_shm", $upload_dir);
 
 $query = "INSERT INTO `tanah` (`id_user`, `tan_judul`, `tan_foto_ktp`, `tan_foto_kk`, `tan_foto_sppt_shm`,
     `tan_surat_konfirmasi`, `tan_tgl_upload`, `tan_konfirmasi`)
@@ -60,16 +55,12 @@ $stmt->bind_param(
     $tan_konfirmasi
 );
 
-$arr = [];
 if ($stmt->execute()) {
-    $arr["success"] = "true";
+    echo json_encode(["success" => "true", "message" => "Data tanah berhasil disimpan"]);
 } else {
-    $arr["success"] = "false";
+    echo json_encode(["success" => "false", "message" => "SQL Error: " . $stmt->error]);
 }
 
 $stmt->close();
 $con->close();
-
-echo json_encode($arr);
-
 ?>

@@ -1,51 +1,46 @@
 <?php
-
 include("db_koneksi.php");
 $con = db_koneksi();
 
-if (isset($_POST["id_user"])) {
-    $id_user = $_POST["id_user"];
-} else
-    return;
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-if (isset($_POST["kt_judul"])) {
-    $kt_judul = $_POST["kt_judul"];
-} else
-    return;
+if (!isset($_POST["id_user"], $_POST["kt_judul"], $_POST["kt_surat_konfirmasi"], $_POST["kt_tgl_upload"], $_POST["kt_konfirmasi"])) {
+    echo json_encode(["success" => "false", "message" => "Data tidak lengkap"]);
+    exit;
+}
 
-if (isset($_POST["kt_foto_akte"])) {
-    $kt_foto_akte = $_POST["kt_foto_akte"];
-} else
-    return;
+$id_user = mysqli_real_escape_string($con, $_POST["id_user"]);
+$kt_judul = mysqli_real_escape_string($con, $_POST["kt_judul"]);
+$kt_surat_konfirmasi = mysqli_real_escape_string($con, $_POST["kt_surat_konfirmasi"]);
+$kt_tgl_upload = mysqli_real_escape_string($con, $_POST["kt_tgl_upload"]);
+$kt_konfirmasi = mysqli_real_escape_string($con, $_POST["kt_konfirmasi"]);
 
-if (isset($_POST["kt_foto_kk"])) {
-    $kt_foto_kk = $_POST["kt_foto_kk"];
-} else
-    return;
+$upload_dir = "uploads/";
+if (!is_dir($upload_dir)) {
+    mkdir($upload_dir, 0777, true);
+}
 
-if (isset($_POST["kt_foto_formulir"])) {
-    $kt_foto_formulir = $_POST["kt_foto_formulir"];
-} else
-    return;
+function uploadFile($file_key, $upload_dir) {
+    if (isset($_FILES[$file_key]) && $_FILES[$file_key]["error"] == UPLOAD_ERR_OK) {
+        $file_tmp = $_FILES[$file_key]["tmp_name"];
+        $file_name = time() . "_" . basename($_FILES[$file_key]["name"]);
+        $file_path = $upload_dir . $file_name;
 
-if (isset($_POST["kt_surat_konfirmasi"])) {
-    $kt_surat_konfirmasi = $_POST["kt_surat_konfirmasi"];
-} else
-    return;
+        if (move_uploaded_file($file_tmp, $file_path)) {
+            return $file_name;
+        }
+    }
+    return "";
+}
 
-if (isset($_POST["kt_tgl_upload"])) {
-    $kt_tgl_upload = $_POST["kt_tgl_upload"];
-} else
-    return;
+$kt_foto_akte = uploadFile("kt_foto_akte", $upload_dir);
+$kt_foto_kk = uploadFile("kt_foto_kk", $upload_dir);
+$kt_foto_formulir = uploadFile("kt_foto_formulir", $upload_dir);
 
-if (isset($_POST["kt_konfirmasi"])) {
-    $kt_konfirmasi = $_POST["kt_konfirmasi"];
-} else
-    return;
-
-$query = "INSERT INTO `ktp` (`id_user`, `kt_judul`, `kt_foto_akte`, `kt_foto_kk`, `kt_foto_formulir`, `kt_surat_konfirmasi`,
-`kt_tgl_upload`, `kt_konfirmasi`)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+$query = "INSERT INTO `ktp` (`id_user`, `kt_judul`, `kt_foto_akte`, `kt_foto_kk`, `kt_foto_formulir`, `kt_surat_konfirmasi`, 
+          `kt_tgl_upload`, `kt_konfirmasi`) 
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
 $stmt = $con->prepare($query);
 $stmt->bind_param(
@@ -60,16 +55,12 @@ $stmt->bind_param(
     $kt_konfirmasi
 );
 
-$arr = [];
 if ($stmt->execute()) {
-    $arr["success"] = "true";
+    echo json_encode(["success" => "true", "message" => "Data KTP berhasil disimpan"]);
 } else {
-    $arr["success"] = "false";
+    echo json_encode(["success" => "false", "message" => "SQL Error: " . $stmt->error]);
 }
 
 $stmt->close();
 $con->close();
-
-echo json_encode($arr);
-
 ?>
