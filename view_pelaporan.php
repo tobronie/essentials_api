@@ -7,7 +7,7 @@ $id_user = isset($_GET['id_user']) ? $_GET['id_user'] : null;
 
 if ($id_user) {
     $query = "SELECT `id_lapor`, `judul_lapor`, `waktu_lapor`, `lokasi_lapor`, `isi_lapor`, `foto_lapor`, `tgl_upload_lapor`, 
-    `konfirmasi_lapor` 
+    `konfirmasi_lapor`, `foto_tanggapan_lapor`, `tgl_tanggapan_lapor`, `ket_tanggapan_lapor` 
     FROM `pelaporan`
     WHERE `id_user` = ?";
 

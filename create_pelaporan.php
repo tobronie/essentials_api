@@ -5,8 +5,20 @@ $con = db_koneksi();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-if (!isset($_POST["id_user"], $_POST["judul_lapor"], $_POST["waktu_lapor"], $_POST["lokasi_lapor"], 
-          $_POST["isi_lapor"], $_POST["tgl_upload_lapor"], $_POST["konfirmasi_lapor"])) {
+if (
+    !isset(
+    $_POST["id_user"],
+    $_POST["judul_lapor"],
+    $_POST["waktu_lapor"],
+    $_POST["lokasi_lapor"],
+    $_POST["isi_lapor"],
+    $_POST["tgl_upload_lapor"],
+    $_POST["konfirmasi_lapor"],
+    $_POST["foto_tanggapan_lapor"],
+    $_POST["tgl_tanggapan_lapor"],
+    $_POST["ket_tanggapan_lapor"]
+)
+) {
     echo json_encode(["success" => "false", "message" => "Data tidak lengkap"]);
     exit;
 }
@@ -18,6 +30,9 @@ $lokasi_lapor = mysqli_real_escape_string($con, $_POST["lokasi_lapor"]);
 $isi_lapor = mysqli_real_escape_string($con, $_POST["isi_lapor"]);
 $tgl_upload_lapor = mysqli_real_escape_string($con, $_POST["tgl_upload_lapor"]);
 $konfirmasi_lapor = mysqli_real_escape_string($con, $_POST["konfirmasi_lapor"]);
+$foto_tanggapan_lapor = mysqli_real_escape_string($con, $_POST["foto_tanggapan_lapor"]);
+$tgl_tanggapan_lapor = mysqli_real_escape_string($con, $_POST["tgl_tanggapan_lapor"]);
+$ket_tanggapan_lapor = mysqli_real_escape_string($con, $_POST["ket_tanggapan_lapor"]);
 
 $foto_lapor = null;
 if (isset($_FILES["foto_lapor"]) && $_FILES["foto_lapor"]["error"] == UPLOAD_ERR_OK) {
@@ -38,12 +53,12 @@ if (isset($_FILES["foto_lapor"]) && $_FILES["foto_lapor"]["error"] == UPLOAD_ERR
     }
 }
 
-$query = "INSERT INTO `pelaporan` (`id_user`, `judul_lapor`, `waktu_lapor`, `lokasi_lapor`, `isi_lapor`, `foto_lapor`, `tgl_upload_lapor`, `konfirmasi_lapor`) 
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+$query = "INSERT INTO `pelaporan` (`id_user`, `judul_lapor`, `waktu_lapor`, `lokasi_lapor`, `isi_lapor`, `foto_lapor`, `tgl_upload_lapor`, `konfirmasi_lapor`, `foto_tanggapan_lapor`, `tgl_tanggapan_lapor`, `ket_tanggapan_lapor`)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 $stmt = $con->prepare($query);
 $stmt->bind_param(
-    "isssssss",
+    "issssssssss",
     $id_user,
     $judul_lapor,
     $waktu_lapor,
@@ -51,7 +66,10 @@ $stmt->bind_param(
     $isi_lapor,
     $foto_lapor,
     $tgl_upload_lapor,
-    $konfirmasi_lapor
+    $konfirmasi_lapor,
+    $foto_tanggapan_lapor,
+    $tgl_tanggapan_lapor,
+    $ket_tanggapan_lapor,
 );
 
 if ($stmt->execute()) {

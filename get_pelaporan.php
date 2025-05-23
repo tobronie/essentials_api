@@ -7,7 +7,9 @@ $id_lapor = isset($_GET['id_lapor']) ? $_GET['id_lapor'] : null;
 if ($id_lapor) {
     $query = "SELECT pelaporan.id_lapor, pelaporan.id_user, user.nama AS nama, 
                  pelaporan.judul_lapor, pelaporan.lokasi_lapor, pelaporan.waktu_lapor, 
-                 pelaporan.isi_lapor, pelaporan.foto_lapor, pelaporan.tgl_upload_lapor, pelaporan.konfirmasi_lapor 
+                 pelaporan.isi_lapor, pelaporan.foto_lapor, pelaporan.tgl_upload_lapor,
+                 pelaporan.konfirmasi_lapor, pelaporan.foto_tanggapan_lapor,
+                 pelaporan.tgl_tanggapan_lapor, pelaporan.ket_tanggapan_lapor 
           FROM pelaporan
           JOIN user ON pelaporan.id_user = user.id_user
           WHERE pelaporan.id_lapor = ? LIMIT 1";
